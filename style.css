@@ -1,0 +1,434 @@
+/* ===== valentine vinyl - the wall =====
+   pink, black and hot pink theme, 3d-tilted turntable + 24 slot album wall
+*/
+
+:root {
+  --bg: #12060d;              /* near-black with a pink tint, so pink pops against it */
+  --panel: #200a16;           /* card/turntable body background */
+  --hot-pink: #ff4da6;
+  --hot-pink-strong: #e60073;
+  --soft-pink: #ffb6c9;
+  --cream: #fff3f8;           /* record label paper colour */
+  --text: #ffffff;
+  --muted: #f5a9c0;
+  --ring: rgba(255, 77, 166, 0.55);
+  --shadow: rgba(0, 0, 0, 0.6);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255, 77, 166, 0.18), transparent 55%),
+    radial-gradient(circle at 85% 100%, rgba(255, 182, 201, 0.12), transparent 55%);
+  overflow-x: hidden;
+}
+
+/* ===== falling hearts, sit behind everything else ===== */
+.hearts-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.heart {
+  position: absolute;
+  top: -10%;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  opacity: 0.85;
+  animation: fall linear infinite;
+}
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: inherit;
+  border-radius: 50%;
+}
+.heart::before { top: -8px; left: 0; }
+.heart::after { left: -8px; top: 0; }
+
+@keyframes fall {
+  0%   { top: -10%; opacity: 0.9; }
+  100% { top: 110%; opacity: 0; }
+}
+
+/* ===== layout ===== */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-family: 'Life Savers', cursive;
+  font-weight: 700;
+  font-size: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--hot-pink);
+  text-shadow: 0 2px 10px rgba(255, 77, 166, 0.4);
+  margin: 0;
+}
+
+.subtitle {
+  margin: .25rem 0 0;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: .3px;
+}
+
+/* ===== turntable stage - perspective wrapper gives the 3d tilt ===== */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1400px;
+  margin-bottom: 2.5rem;
+}
+
+.turntable {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  padding: 30px;
+  border-radius: 24px;
+  background: linear-gradient(155deg, #2a0f1c, #1a0510);
+  border: 1px solid rgba(255, 77, 166, 0.25);
+  box-shadow:
+    0 30px 60px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* the 3d tilt - rotate the whole turntable body back slightly on the x axis */
+  transform: rotateX(28deg);
+  transform-style: preserve-3d;
+}
+
+.platter {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3a1522, #150409);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 6px rgba(255, 77, 166, 0.15);
+  transform: translateZ(10px); /* lifts the platter slightly above the body, for depth */
+}
+
+.record {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, #ffb6c9, #ffb6c9 8%, #1a0510 8%, #1a0510 10%);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: transform .3s ease;
+}
+
+/* fine groove lines drawn on top of the record's base pattern, for texture */
+.grooves {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px);
+}
+
+/* spinning only happens while a track is playing */
+.record.spinning {
+  animation: spin 2.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.record-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44%;
+  height: 44%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  box-shadow: inset 0 0 0 2px rgba(230, 0, 115, 0.15);
+}
+
+.label-title {
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--hot-pink-strong);
+  line-height: 1.2;
+  max-width: 90%;
+  overflow-wrap: break-word;
+}
+
+.label-artist {
+  font-size: .58rem;
+  color: #a05070;
+  margin-top: 2px;
+}
+
+.spindle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  background: var(--hot-pink-strong);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+/* ===== tonearm - pivots from a rest position down onto the record when playing ===== */
+.tonearm {
+  position: absolute;
+  top: 10px;
+  right: 4px;
+  width: 130px;
+  height: 130px;
+  transform: translateZ(20px); /* sits above the platter in the 3d stack */
+}
+
+.tonearm-base {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe1ee, var(--hot-pink-strong));
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+
+.tonearm-arm {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 100px;
+  height: 8px;
+  background: linear-gradient(90deg, var(--hot-pink-strong), var(--soft-pink));
+  border-radius: 6px;
+  transform-origin: right center;
+  transform: rotate(-32deg); /* resting position, off the record */
+  transition: transform .6s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+}
+
+.tonearm-head {
+  position: absolute;
+  left: -6px;
+  top: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--cream);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* when playing, the arm swings down onto the record */
+.tonearm.playing .tonearm-arm {
+  transform: rotate(-6deg);
+}
+
+/* ===== play / pause button, sits on the turntable body itself ===== */
+.play-pause-btn {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%) translateZ(30px);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(180deg, var(--hot-pink), var(--hot-pink-strong));
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(230, 0, 115, 0.5);
+  transition: transform .15s ease, filter .15s ease;
+}
+.play-pause-btn:hover { filter: brightness(1.1); }
+.play-pause-btn:active { transform: translateX(-50%) translateZ(30px) scale(.94); }
+
+.now-playing {
+  margin-top: 3rem;
+  text-align: center;
+}
+.now-playing-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.now-playing-artist {
+  margin: .2rem 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.now-playing-artist.error {
+  color: var(--soft-pink);
+  font-style: italic;
+}
+
+/* ===== album wall - 24 slots in a grid ===== */
+.album-wall {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .85rem;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  list-style: none;
+}
+
+.album-slot {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.album-slot:hover {
+  transform: translateY(-3px);
+}
+
+/* highlighted = currently selected via keyboard browsing */
+.album-slot.is-highlighted {
+  border-color: var(--hot-pink);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* playing = the record that's actually loaded on the turntable right now */
+.album-slot.is-playing::after {
+  content: 'now playing';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: .55rem;
+  background: rgba(0,0,0,0.55);
+  color: var(--soft-pink);
+  padding: 2px 6px;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+.album-art {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: 6px;
+  /* once real cover art loads in, this makes it fill the square nicely */
+  background-size: cover;
+  background-position: center;
+  transition: background-image .3s ease;
+}
+
+.album-art-title {
+  font-size: .6rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 5px;
+  border-radius: 5px;
+  line-height: 1.2;
+}
+
+/* ===== hint text at the bottom ===== */
+.hint {
+  text-align: center;
+  color: var(--muted);
+  font-size: .85rem;
+  margin-top: 1rem;
+}
+
+kbd {
+  background: #2a0f1c;
+  border: 1px solid rgba(255, 77, 166, 0.35);
+  border-bottom-width: 2px;
+  padding: 0 .3rem;
+  border-radius: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .75rem;
+}
+
+/* ===== responsive - fewer columns as the screen narrows ===== */
+@media (max-width: 720px) {
+  .album-wall { grid-template-columns: repeat(4, 1fr); }
+  .turntable { width: 260px; height: 260px; }
+}
+
+@media (max-width: 420px) {
+  .album-wall { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* keyboard focus visibility */
+.album-slot:focus-visible,
+.play-pause-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* ===== reduced motion =====
+   the falling hearts, record spin, tonearm swing and hover/lift transforms
+   are all decorative rather than load-bearing for understanding the page,
+   so they're the right things to cut for anyone who's told their system
+   they'd rather not see them. the record still visibly changes (via the
+   label text and the "now playing" tag) so play state is still obvious
+   without the spin itself. */
+@media (prefers-reduced-motion: reduce) {
+  .heart {
+    display: none;
+  }
+
+  .record.spinning {
+    animation: none;
+  }
+
+  .record,
+  .tonearm-arm,
+  .album-slot,
+  .play-pause-btn {
+    transition: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>valentine vinyl</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Life+Savers:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- falling hearts get added here by script.js -->
+  <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <header class="app-header">
+      <h1>the wall</h1>
+    </header>
+
+    <!-- turntable stage -->
+    <section class="stage" aria-label="turntable">
+      <div class="turntable">
+
+        <!-- the platter + spinning record -->
+        <div class="platter">
+          <div class="record" id="record">
+            <div class="grooves"></div>
+            <div class="record-label" id="recordLabel">
+              <span class="label-title" id="labelTitle">pick a record</span>
+              <span class="label-artist" id="labelArtist">&nbsp;</span>
+            </div>
+            <div class="spindle"></div>
+          </div>
+        </div>
+
+        <!-- tonearm, pivots from rest to the record edge when playing -->
+        <div class="tonearm" id="tonearm">
+          <div class="tonearm-base"></div>
+          <div class="tonearm-arm">
+            <div class="tonearm-head"></div>
+          </div>
+        </div>
+
+        <!-- play/pause lives right on the turntable body -->
+        <button id="playPauseBtn" class="play-pause-btn" aria-label="play or pause">
+          <span id="playPauseIcon">▶</span>
+        </button>
+      </div>
+
+      <div class="now-playing" aria-live="polite">
+        <p class="now-playing-title" id="nowPlayingTitle">nothing playing yet</p>
+        <p class="now-playing-artist" id="nowPlayingArtist">click a record on the wall</p>
+      </div>
+    </section>
+
+    <!-- the album wall - 24 slots, filled in by script.js -->
+    <section class="album-wall" id="albumWall" role="listbox" aria-label="album wall">
+      <!-- js builds 24 .album-slot buttons here -->
+    </section>
+
+    <p class="hint">
+      click a record to play it · <kbd>space</kbd> play/pause · <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> browse · <kbd>enter</kbd> play highlighted
+    </p>
+
+  </main>
+
+  <!-- hidden soundcloud player - controlled entirely through the widget api in script.js -->
+  <iframe
+    id="scWidget"
+    title="soundcloud player"
+    style="display:none"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/forss/flickermood&auto_play=false&show_artwork=false"
+    allow="autoplay">
+  </iframe>
+
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
